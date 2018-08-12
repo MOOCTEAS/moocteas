@@ -1,1 +1,1 @@
-# next-peer-news
+# A React Boilerplate with a hacker news example
