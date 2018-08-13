@@ -1,0 +1,3 @@
+// drawer constants
+export const TOGGLE_DRAWER_MOBILE_VISIBILITY =
+  "TOGGLE_DRAWER_MOBILE_VISIBILITY";
