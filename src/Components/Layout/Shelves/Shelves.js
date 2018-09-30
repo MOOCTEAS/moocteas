@@ -1,7 +1,6 @@
-import React, { Fragment, Component } from "react";
+import React, { Fragment } from "react";
 import { compose } from "recompose";
-import { withRouter } from "react-router";
-import isEmpty from "lodash/isEmpty";
+import { connect } from "react-redux";
 
 //material-ui
 import List from "@material-ui/core/List";
@@ -9,8 +8,11 @@ import Divider from "@material-ui/core/Divider";
 import { withStyles } from "@material-ui/core/styles";
 
 //local components
+import { withRoutes } from "../../../Containers/routes/withRoutes";
 import { HomeShelf } from "./HomeShelf";
 import { UserInputShelf } from "./UserInputShelf";
+import { LoginShelf } from "./LoginShelf";
+import { LogoutShelf } from "./LogoutShelf";
 //other local imports
 import { materializeProps } from "../../../utils/materializeProps";
 
@@ -18,43 +20,32 @@ const styles = theme => ({
   toolbar: theme.mixins.toolbar
 });
 
-class ShelvesComponent extends Component {
-  state = {
-    isLoading: true,
-    isHomeRoute: false,
-    hasChangedRoute: false
-  };
-  componentWillMount() {
-    const { history, match } = this.props;
-    this.setIsHomeRoute(isEmpty(match.params));
-    history.listen(location => {
-      this.setIsHomeRoute(location.pathname === "/" ? true : false);
-    });
-  }
+const ShelvesComponent = ({ classes, isHomeRoute }) => (
+    <Fragment>
+      <div className={classes.toolbar} data-cy="Shelves" />
+      <Divider />
+      <List>{isHomeRoute ? <UserInputShelf /> : <HomeShelf />}</List>
+      <Divider />      
+      <List><LoginShelf /></List>
+      <Divider />
+      <List><LogoutShelf /></List>
+    </Fragment>
+)
 
-  setIsHomeRoute = result => {
-    this.setState(({ isHomeRoute }) => ({
-      isHomeRoute: result
-    }));
-  };
+const mapStateToProps = () => ({
 
-  render() {
-    const { classes } = this.props;
-    const { isHomeRoute } = this.state;
-    return (
-      <Fragment>
-        <div className={classes.toolbar} data-cy="Shelves" />
-        <Divider />
-        <List>{isHomeRoute ? <UserInputShelf /> : <HomeShelf />}</List>
-      </Fragment>
-    );
-  }
-}
+});
+
+const mapDispatchToProps = {};
 
 const enhance = compose(
-  withRouter,
+  withRoutes,
   withStyles(styles, { withTheme: true }),
-  materializeProps()
+  materializeProps(),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )
 );
 
 export const Shelves = enhance(ShelvesComponent);

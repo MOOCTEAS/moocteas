@@ -1,5 +1,6 @@
 import React, { Fragment } from "react";
 import PropTypes from "prop-types";
+import { translate, Trans } from 'react-i18next';
 
 //redux
 import { connect } from "react-redux";
@@ -33,7 +34,7 @@ const styles = theme => ({
   }
 });
 
-const AppBarComponent = ({ classes, theme, toggleDrawerMobileVisibility }) => (
+const AppBarComponent = ({ classes, theme, toggleDrawerMobileVisibility, t }) => (
   <Fragment>
     <AppBarMUI className={classes.appBar} data-cy="AppBar">
       <Toolbar>
@@ -48,7 +49,7 @@ const AppBarComponent = ({ classes, theme, toggleDrawerMobileVisibility }) => (
           <MenuIcon />
         </IconButton>
         <Typography variant="title" color="inherit" noWrap>
-          Responsive drawer
+          {t('responsive_drawer')}
         </Typography>
       </Toolbar>
     </AppBarMUI>
@@ -64,6 +65,7 @@ const mapDispatchToProps = {
 };
 
 const enhance = compose(
+  translate(),
   withStyles(styles, { withTheme: true }),
   materializeProps(propTypes),
   connect(
