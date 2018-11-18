@@ -8,12 +8,18 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import { auth } from '../../../rebase.config.js';
+import { googleAuthenticationProvider } from "../../../firebase.config.js";
 
 const styles = theme => ({
   title: {
     ...theme.mixins.gutters(),
   }
 });
+
+const signInWithRedirect = () => {
+  auth.signInWithRedirect(googleAuthenticationProvider);
+}
 
 const LoginShelfComponent = ({ classes }) => (
   <Fragment>
@@ -26,7 +32,7 @@ const LoginShelfComponent = ({ classes }) => (
       </ListItemIcon>
       <ListItemText primary="Facebook" />
     </ListItem>
-    <ListItem button onClick={() => history.push("/google")} data-cy="LoginShelf">
+    <ListItem button onClick={() => signInWithRedirect()} data-cy="LoginShelf">
       <ListItemIcon>
         <ChevronRightIcon />
       </ListItemIcon>

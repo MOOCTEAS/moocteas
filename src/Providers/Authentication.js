@@ -15,18 +15,12 @@ export class Authentication extends Component {
       loading: true,
       language: 'en',
       isAdmin: false,
-      firebaseUser: {},
+      firebaseUser: null,
     };
   }
 
   async componentWillMount() {
-    const { firebaseUser } = this.state;
-    const isLoggedOut = !Object.keys(firebaseUser).length;
-    console.log('firebaseUser', firebaseUser);
-    console.log('isLoggedOut', isLoggedOut);
-    await sleep(5000);
-    const result = await this.signInWithRedirect();
-    console.log(result);
+    await this.signInWithRedirect();
       /*
       if (user) {
         this.setState({
@@ -69,61 +63,59 @@ export class Authentication extends Component {
     */
   }
 
-  componentDidMount() {
-    this.signInWithGoogleRedirect();
-  }
+  async componentDidMount() {
 
-  componentWillUnmount() {
-    // to remove auth listener
-
-  }
-
-  signInWithGoogleRedirect() {
-    auth.signInWithRedirect(googleAuthenticationProvider);
-  }
-
-  async signInWithGooglePopup() {
-    const result = await auth.signInWithPopup(googleAuthenticationProvider);
-    console.log(result);
   }
 
   async signInWithRedirect() {
+    console.log('91');
     let result;
     try {
-      result = await auth.getRedirectResult();
-      const { user, credential, operationType, email } = result;
+      console.log('93')
+      await sleep(5000);
+      result = auth.getRedirectResult();
+      console.log('result', result);
+      const { user } = result.i;
       console.log('user', user);
-      console.log('credential', credential);
-      console.log('operationType', operationType);
-      console.log('email', email);
       this.setState({
         hasUser: true, loading: false, firebaseUser: user,
-      }, () => { console.log(this.state)});
+      }, () => { console.log('line 101', this.state)});
       return 'success';
     } catch (error) {
-      const { email, credential, code } = error;
-      auth.fetchProvidersForEmail(email).then(function(providers) {
-        // The returned 'providers' is a list of the available providers
-        // linked to the email address. Please refer to the guide for a more
-        // complete explanation on how to recover from this error.
-        console.log(providers);
-        console.log(email);
-        console.log(credential);
-        console.log(code);
-      });
+      console.log('105');
+      console.log('error', error);
     }
+    console.log('117')
   }
 
   render() {
+
+    console.log(this.state);
+
     const { children } = this.props;
+
     const {
       hasUser, loading, language, firebaseUser, isAdmin,
     } = this.state;
+
+    if (this.state.firebaseUser === null) {
+      return (
+        <Fragment>
+          { React.cloneElement(children, {
+            language,
+            hasUser,
+            isAdmin,
+            loading
+          })}
+        </Fragment>
+      )
+    }
+
     const {
-      displayName, photoURL,
+      displayName, photoURL
     } = firebaseUser;
 
-
+    console.log(this.state);
 
     return (
       <Fragment>
