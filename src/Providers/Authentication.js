@@ -4,6 +4,8 @@ import { history } from '../Router/history';
 import { base, auth } from '../rebase.config';
 import { googleAuthenticationProvider } from "../firebase.config.js";
 
+import { sleep } from "../utils/sleep";
+
 export class Authentication extends Component {
 
   constructor(props) {
@@ -17,8 +19,14 @@ export class Authentication extends Component {
     };
   }
 
-  componentWillMount() {
-
+  async componentWillMount() {
+    const { firebaseUser } = this.state;
+    const isLoggedOut = !Object.keys(firebaseUser).length;
+    console.log('firebaseUser', firebaseUser);
+    console.log('isLoggedOut', isLoggedOut);
+    await sleep(5000);
+    const result = await this.signInWithRedirect();
+    console.log(result);
       /*
       if (user) {
         this.setState({
@@ -62,7 +70,7 @@ export class Authentication extends Component {
   }
 
   componentDidMount() {
-    this.signInWithGooglePopup();
+    this.signInWithGoogleRedirect();
   }
 
   componentWillUnmount() {
@@ -77,6 +85,33 @@ export class Authentication extends Component {
   async signInWithGooglePopup() {
     const result = await auth.signInWithPopup(googleAuthenticationProvider);
     console.log(result);
+  }
+
+  async signInWithRedirect() {
+    let result;
+    try {
+      result = await auth.getRedirectResult();
+      const { user, credential, operationType, email } = result;
+      console.log('user', user);
+      console.log('credential', credential);
+      console.log('operationType', operationType);
+      console.log('email', email);
+      this.setState({
+        hasUser: true, loading: false, firebaseUser: user,
+      }, () => { console.log(this.state)});
+      return 'success';
+    } catch (error) {
+      const { email, credential, code } = error;
+      auth.fetchProvidersForEmail(email).then(function(providers) {
+        // The returned 'providers' is a list of the available providers
+        // linked to the email address. Please refer to the guide for a more
+        // complete explanation on how to recover from this error.
+        console.log(providers);
+        console.log(email);
+        console.log(credential);
+        console.log(code);
+      });
+    }
   }
 
   render() {
