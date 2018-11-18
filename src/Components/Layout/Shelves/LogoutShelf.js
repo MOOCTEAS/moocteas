@@ -6,9 +6,12 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import { auth } from '../../../rebase.config.js';
 
 export const LogoutShelf = () => (
-  <ListItem button onClick={() => history.push("/logout")} data-cy="LogoutShelf">
+  <ListItem button onClick={() => {
+    auth.signOut();
+  }} data-cy="LogoutShelf">
     <ListItemIcon>
       <ChevronLeftIcon />
     </ListItemIcon>

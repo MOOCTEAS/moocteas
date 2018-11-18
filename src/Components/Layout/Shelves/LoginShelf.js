@@ -9,7 +9,10 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import { auth } from '../../../rebase.config.js';
-import { googleAuthenticationProvider } from "../../../firebase.config.js";
+import {
+  googleAuthenticationProvider,
+  facebookAuthenticationProvider
+} from "../../../firebase.config.js";
 
 const styles = theme => ({
   title: {
@@ -17,8 +20,8 @@ const styles = theme => ({
   }
 });
 
-const signInWithRedirect = () => {
-  auth.signInWithRedirect(googleAuthenticationProvider);
+const signInWithRedirect = (provider) => {
+  auth.signInWithRedirect(provider);
 }
 
 const LoginShelfComponent = ({ classes }) => (
@@ -26,13 +29,13 @@ const LoginShelfComponent = ({ classes }) => (
     <div className={classes.title}>
       <ListItemText primary="Login with..." />
     </div>
-    <ListItem button onClick={() => history.push("/facebook")} data-cy="LoginShelf">
+    <ListItem button onClick={() => signInWithRedirect(facebookAuthenticationProvider)} data-cy="LoginShelf">
       <ListItemIcon>
         <ChevronRightIcon />
       </ListItemIcon>
       <ListItemText primary="Facebook" />
     </ListItem>
-    <ListItem button onClick={() => signInWithRedirect()} data-cy="LoginShelf">
+    <ListItem button onClick={() => signInWithRedirect(googleAuthenticationProvider)} data-cy="LoginShelf">
       <ListItemIcon>
         <ChevronRightIcon />
       </ListItemIcon>

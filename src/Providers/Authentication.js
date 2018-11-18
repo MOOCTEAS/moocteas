@@ -1,10 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { history } from '../Router/history';
-import { base, auth } from '../rebase.config';
-import { googleAuthenticationProvider } from "../firebase.config.js";
+import { auth } from '../rebase.config';
 
-import { sleep } from "../utils/sleep";
 
 export class Authentication extends Component {
 
@@ -21,6 +19,19 @@ export class Authentication extends Component {
 
   async componentWillMount() {
     await this.signInWithRedirect();
+    const that = this;
+    auth.onAuthStateChanged(function(user) {
+      if (user) {
+        history.push("/");
+      } else {
+        that.setState({
+          firebaseUser: null,
+          hasUser: false,
+        }, () => { console.log(that.state)})
+        history.push("/logout");
+      }
+    });
+
       /*
       if (user) {
         this.setState({
@@ -75,9 +86,14 @@ export class Authentication extends Component {
       console.log('error', error);
     });
 
-    this.setState({
-      hasUser: true, loading: false, firebaseUser: user,
-    });
+    if (user) {
+      const { displayName, photoURL } = user;
+
+      this.setState({
+        hasUser: true, loading: false, firebaseUser: { displayName, photoURL },
+      });
+    }
+
   }
 
   render() {
@@ -87,6 +103,8 @@ export class Authentication extends Component {
     const {
       hasUser, loading, language, firebaseUser, isAdmin,
     } = this.state;
+
+    console.log(this.state);
 
     if (firebaseUser === null) {
       return (
