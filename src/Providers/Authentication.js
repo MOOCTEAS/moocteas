@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { history } from '../Router/history';
-import { base } from '../rebase.config';
+import { base, auth } from '../rebase.config';
 import { googleAuthenticationProvider } from "../firebase.config.js";
 
 export class Authentication extends Component {
@@ -18,7 +18,8 @@ export class Authentication extends Component {
   }
 
   componentWillMount() {
-    const authDataCallback = (user) => {
+
+      /*
       if (user) {
         this.setState({
           hasUser: true, loading: false, firebaseUser: user,
@@ -57,14 +58,20 @@ export class Authentication extends Component {
         history.push('/');
       }
     };
-    // Listen to authentication
-    this.unsubscribeToAuthListener = base.onAuth(authDataCallback);
+    */
+  }
+
+  componentDidMount() {
+    this.signInWithGoogle();
   }
 
   componentWillUnmount() {
     // to remove auth listener
-    this.unsubscribeToAuthListener();
-    // base.removeBinding(this.ref);
+
+  }
+
+  signInWithGoogle() {
+    auth.signInWithRedirect(googleAuthenticationProvider);
   }
 
   render() {
@@ -76,7 +83,7 @@ export class Authentication extends Component {
       displayName, photoURL,
     } = firebaseUser;
 
-    console.log('Authentication state', this.state);
+
 
     return (
       <Fragment>
