@@ -62,7 +62,7 @@ export class Authentication extends Component {
   }
 
   componentDidMount() {
-    this.signInWithGoogle();
+    this.signInWithGooglePopup();
   }
 
   componentWillUnmount() {
@@ -70,8 +70,13 @@ export class Authentication extends Component {
 
   }
 
-  signInWithGoogle() {
+  signInWithGoogleRedirect() {
     auth.signInWithRedirect(googleAuthenticationProvider);
+  }
+
+  async signInWithGooglePopup() {
+    const result = await auth.signInWithPopup(googleAuthenticationProvider);
+    console.log(result);
   }
 
   render() {
