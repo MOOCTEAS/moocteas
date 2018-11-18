@@ -68,29 +68,19 @@ export class Authentication extends Component {
   }
 
   async signInWithRedirect() {
-    console.log('91');
-    let result;
-    try {
-      console.log('93')
-      await sleep(5000);
-      result = auth.getRedirectResult();
-      console.log('result', result);
-      const { user } = result.i;
-      console.log('user', user);
-      this.setState({
-        hasUser: true, loading: false, firebaseUser: user,
-      }, () => { console.log('line 101', this.state)});
-      return 'success';
-    } catch (error) {
-      console.log('105');
+
+    const user = await auth.getRedirectResult().then(function(result) {
+      return result.user;
+    }, function(error) {
       console.log('error', error);
-    }
-    console.log('117')
+    });
+
+    this.setState({
+      hasUser: true, loading: false, firebaseUser: user,
+    });
   }
 
   render() {
-
-    console.log(this.state);
 
     const { children } = this.props;
 
@@ -98,7 +88,7 @@ export class Authentication extends Component {
       hasUser, loading, language, firebaseUser, isAdmin,
     } = this.state;
 
-    if (this.state.firebaseUser === null) {
+    if (firebaseUser === null) {
       return (
         <Fragment>
           { React.cloneElement(children, {
