@@ -28,7 +28,7 @@
     "redux-thunk": "^2.3.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "react-scripts start",   
     "build": "react-scripts build",
     "build:staging": "REACT_APP_ENV='staging' react-scripts build",
     "deploy:staging": "yarn run build:staging && yarn run deploy:functions:staging && yarn run deploy:hosting:staging",
