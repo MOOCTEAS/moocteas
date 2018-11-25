@@ -1,23 +1,30 @@
+
+#
+# Generic references
+#
+
+default_setup: &default_setup
+  docker:
+    - image: circleci/node:8.7
+  working_directory: /tmp/train-effective-ci
+
 # Javascript Node CircleCI 2.0 configuration file
 #
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
 version: 2
 jobs:
-  build:
-    docker:
-      # specify the version you desire here
-      - image: circleci/node:7.10
-      
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/mongo:3.4.4
-
-    working_directory: ~/repo
+  deploy-job:
+    <<: *default_setup
 
     steps:
       - checkout
+
+      - run:
+          name: Display node and npm information
+          command: |
+            echo "node version $(node -v) running"
+            echo "npm version $(npm -v) running"
 
       # Download and cache dependencies
       - restore_cache:
@@ -26,14 +33,43 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
-      - run: yarn install
+      - run:
+          name: Install dependencies
+          command: yarn install && cd functions && yarn install && cd ..
+
+      # run tests!
+      - run:
+          name: Run tests
+          command: yarn test:ci
+
+      - store_test_results:
+          path: test-results
+
+      - deploy:
+          name: Deploy to a branch specific environment
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ];
+            then
+              yarn deploy:production --token=$FIREBASE_TOKEN
+            fi
+            if [ "${CIRCLE_BRANCH}" == "staging" ];
+            then
+              yarn deploy --token=$FIREBASE_TOKEN
+            fi
 
       - save_cache:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
-        
-      # run tests!
-      - run: yarn test
 
-
+workflows:
+  version: 2
+  deploy-workflow:
+    jobs:
+      - deploy-job:
+          filters:
+            branches:
+              only:
+                - develop
+                - staging
+                - master

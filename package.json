@@ -1,7 +1,7 @@
 {
-  "name": "react-redux-material-ui-cypress-boilerplate",
+  "name": "moocteas",
   "version": "0.1.0",
-  "private": false,
+  "private": true,
   "dependencies": {
     "@material-ui/core": "^1.4.0",
     "@material-ui/icons": "^1.1.0",
@@ -28,14 +28,24 @@
     "redux-thunk": "^2.3.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
+    "start": "REACT_APP_ENV='development' react-scripts start",
+    "build": "REACT_APP_ENV='development' react-scripts build",
+
+    "build:staging": "REACT_APP_ENV='staging' react-scripts build",
+    "deploy:staging": "yarn run build:staging && yarn run deploy:functions:staging && yarn run deploy:hosting:staging",
+    "deploy:functions:staging": "firebase deploy --only functions -P staging",
+    "deploy:hosting:staging": "firebase deploy --only hosting -P staging",
+
+    "build:production": "REACT_APP_ENV='production' react-scripts build",
+    "deploy:production": "yarn run build:production && yarn run deploy:functions:production && yarn run deploy:hosting:production",
+    "deploy:functions:production": "firebase deploy --only functions -P production",
+    "deploy:hosting:production": "firebase deploy --only hosting -P production",
+
     "cypress:open": "cypress open",
     "cypress:headed": "cypress run --headed",
     "cypress:chrome": "cypress run --browser chrome",
     "cypress:canary": "cypress run --browser canary",
-    "eject": "react-scripts eject"
+    "test:ci": "cypress run"
   },
   "devDependencies": {
     "cypress": "^3.0.2",
