@@ -31,7 +31,7 @@
     "start": "react-scripts start",   
     "build": "react-scripts build",
     "build:staging": "REACT_APP_ENV='staging' react-scripts build",
-    "deploy:staging": "yarn run build:staging && yarn run deploy:functions:staging && yarn run deploy:hosting:staging",
+    "deploy:staging": "CI=false yarn run build:staging && yarn run deploy:functions:staging && yarn run deploy:hosting:staging",
     "deploy:functions:staging": "firebase deploy --only functions -P staging",
     "deploy:hosting:staging": "firebase deploy --only hosting -P staging",
     "build:production": "REACT_APP_ENV='production' react-scripts build",
