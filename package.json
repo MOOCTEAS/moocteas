@@ -9,6 +9,7 @@
     "classnames": "^2.2.6",
     "connected-react-router": "^4.3.0",
     "firebase": "^5.5.2",
+    "firebase-tools": "latest",
     "i18next": "11.3.2",
     "i18next-browser-languagedetector": "^2.2.3",
     "i18next-xhr-backend": "^1.5.1",
