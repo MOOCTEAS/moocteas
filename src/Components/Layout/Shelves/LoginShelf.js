@@ -11,7 +11,8 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import { auth } from '../../../rebase.config.js';
 import {
   googleAuthenticationProvider,
-  facebookAuthenticationProvider
+  facebookAuthenticationProvider,
+  twitterAuthenticationProvider
 } from "../../../firebase.config.js";
 
 const styles = theme => ({
@@ -40,6 +41,12 @@ const LoginShelfComponent = ({ classes }) => (
         <ChevronRightIcon />
       </ListItemIcon>
       <ListItemText primary="Google" />
+    </ListItem>
+    <ListItem button onClick={() => signInWithRedirect(twitterAuthenticationProvider)} data-cy="LoginShelf">
+      <ListItemIcon>
+        <ChevronRightIcon />
+      </ListItemIcon>
+      <ListItemText primary="Twitter" />
     </ListItem>
   </Fragment>
 );

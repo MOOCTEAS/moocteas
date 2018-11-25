@@ -38,17 +38,17 @@ jobs:
           command: yarn install && cd functions && yarn install && cd ..
 
       # start the server!
-      - run:
-          name: Start server
-          command: yarn start
+      #- run:
+      #    name: Start server
+      #    command: yarn start
 
       # run tests!
-      - run:
-          name: Run tests
-          command: yarn test:ci
+      #- run:
+      #    name: Run tests
+      #    command: yarn test:ci
 
-      - store_test_results:
-          path: test-results
+      #- store_test_results:
+      #    path: test-results
 
       - deploy:
           name: Deploy to a branch specific environment
@@ -59,7 +59,7 @@ jobs:
             fi
             if [ "${CIRCLE_BRANCH}" == "staging" ];
             then
-              yarn deploy --token=$FIREBASE_TOKEN
+              yarn deploy:staging --token=$FIREBASE_TOKEN
             fi
 
       - save_cache:
