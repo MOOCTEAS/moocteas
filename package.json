@@ -45,7 +45,7 @@
     "cypress:headed": "cypress run --headed",
     "cypress:chrome": "cypress run --browser chrome",
     "cypress:canary": "cypress run --browser canary",
-    "test:ci": "cypress run"
+    "test:ci": "DEBUG=cypress:launcher cypress run --browser chrome"
   },
   "devDependencies": {
     "cypress": "^3.0.2",
