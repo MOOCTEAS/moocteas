@@ -5,8 +5,8 @@
 
 default_setup: &default_setup
   docker:
-    - image: circleci/node:8.7
-  working_directory: /tmp/train-effective-ci
+    - image: cypress/base:8
+  working_directory: /tmp/moocteas-ci
 
 # Javascript Node CircleCI 2.0 configuration file
 #
@@ -37,13 +37,18 @@ jobs:
           name: Install dependencies
           command: yarn install && cd functions && yarn install && cd ..
 
-      # run tests!
-      - run:
-          name: Run tests
-          command: yarn test:ci
+      # start the server!
+      #- run:
+      #    name: Start server
+      #    command: yarn start
 
-      - store_test_results:
-          path: test-results
+      # run tests!
+      #- run:
+      #    name: Run tests
+      #    command: yarn test:ci
+
+      #- store_test_results:
+      #    path: test-results
 
       - deploy:
           name: Deploy to a branch specific environment
@@ -54,7 +59,7 @@ jobs:
             fi
             if [ "${CIRCLE_BRANCH}" == "staging" ];
             then
-              yarn deploy --token=$FIREBASE_TOKEN
+              yarn deploy:staging --token=$FIREBASE_TOKEN
             fi
 
       - save_cache:

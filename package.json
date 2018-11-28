@@ -8,7 +8,8 @@
     "axios": "^0.18.0",
     "classnames": "^2.2.6",
     "connected-react-router": "^4.3.0",
-    "firebase": "^5.5.2",
+    "firebase": "latest",
+    "firebase-tools": "latest",
     "i18next": "11.3.2",
     "i18next-browser-languagedetector": "^2.2.3",
     "i18next-xhr-backend": "^1.5.1",
@@ -28,19 +29,16 @@
     "redux-thunk": "^2.3.0"
   },
   "scripts": {
-    "start": "REACT_APP_ENV='development' react-scripts start",
-    "build": "REACT_APP_ENV='development' react-scripts build",
-
+    "start": "react-scripts start",   
+    "build": "react-scripts build",
     "build:staging": "REACT_APP_ENV='staging' react-scripts build",
-    "deploy:staging": "yarn run build:staging && yarn run deploy:functions:staging && yarn run deploy:hosting:staging",
-    "deploy:functions:staging": "firebase deploy --only functions -P staging",
-    "deploy:hosting:staging": "firebase deploy --only hosting -P staging",
-
+    "deploy:staging": "CI=false yarn run build:staging && yarn run deploy:hosting:staging",
+    "deploy:functions:staging": "firebase deploy --only functions",
+    "deploy:hosting:staging": "firebase deploy --only hosting",
     "build:production": "REACT_APP_ENV='production' react-scripts build",
     "deploy:production": "yarn run build:production && yarn run deploy:functions:production && yarn run deploy:hosting:production",
     "deploy:functions:production": "firebase deploy --only functions -P production",
     "deploy:hosting:production": "firebase deploy --only hosting -P production",
-
     "cypress:open": "cypress open",
     "cypress:headed": "cypress run --headed",
     "cypress:chrome": "cypress run --browser chrome",
@@ -48,7 +46,7 @@
     "test:ci": "cypress run"
   },
   "devDependencies": {
-    "cypress": "^3.0.2",
+    "cypress": "latest",
     "eslint-plugin-cypress": "^2.0.1"
   },
   "browserslist": {
